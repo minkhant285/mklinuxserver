@@ -1,0 +1,352 @@
+#!/bin/bash
+  mkdir -p /home/share
+  mkdir -p /home/share/hdd1
+  mkdir -p /home/share/hdd2
+  mkdir -p /home/share/hdd3
+  mkdir -p /home/share/hdd4
+ if [ "$1" = "start" ]
+ then
+  lsblk -l
+echo 
+echo
+ echo "Enter Your Device"
+    echo "a:/dev/sda1"
+    echo "b:/dev/sdb1"
+    echo "c:/dev/sdc1"
+    echo "d:/dev/sdd1"
+    echo "e:exit"
+echo 
+ read -p "Enter Device" device
+ if [ "$device" = "a" ]
+  then
+    umount /dev/sda1
+    service smbd start
+    mount /dev/sda1 /home/share/hdd1
+echo 
+echo 
+echo "###########MK's Server Successfully Started........." 
+echo 
+echo 
+fi
+ if [ "$device" = "b" ]
+then
+ umount /dev/sdb1
+    service smbd start
+    mount /dev/sdb1 /home/share/hdd2
+ echo 
+echo 
+ echo "###########MK's Server Successfully Started........." 
+echo 
+echo 
+fi
+
+if [ "$device" = "c" ]
+then
+ umount /dev/sdc1
+    service smbd start
+    mount /dev/sdc1 /home/share/hdd3
+ echo 
+echo 
+ echo "###########MK's Server Successfully Started........." 
+echo 
+echo 
+fi
+if [ "$device" = "d" ]
+then
+ umount /dev/sdd1
+    service smbd start
+    mount /dev/sdd1 /home/share/hdd4
+ echo 
+echo 
+ echo "###########MK's Server Successfully Started........." 
+echo 
+echo 
+fi
+if [ "$device" = "e" ]
+then
+exit
+ echo 
+echo 
+ echo "exit........." 
+echo 
+echo 
+fi
+
+elif [ "$1" = "stop"  ]
+    then
+   service smbd stop
+    umount -l /dev/sd* 
+echo 
+echo    
+echo " .............MK's Server Stopped  xxxxxxxxxxxxxxx"
+echo 
+echo 
+elif [ "$1" = "-as" ] 
+     then
+      service apache2 start
+      service mysql start
+echo 
+echo      
+ echo  "Web service Started....."
+echo
+echo 
+elif [ "$1" = "-ap" ]
+      then 
+         service apache2 stop
+         service mysql stop
+echo 
+echo        
+ echo "Web service stoped .......x"
+echo 
+echo
+elif [ "$1" = "-ns" ]
+  then
+     service smbd start
+  echo
+  echo "normal smbd started..............."
+  echo
+  elif [ "$1" = "-np" ]
+  then
+   service smbd stop
+  echo
+  echo "normal smbd stopped.............."
+ echo
+elif [ "$1" = "-fs" ]
+ then
+    service vsftpd start
+ echo 
+echo 
+echo "Ftp Service Started................"
+echo 
+echo
+elif [ "$1" = "-fp" ]
+ then
+    service vsftpd stop
+ echo 
+echo 
+echo "Ftp Service Stopped..................."
+echo 
+echo
+
+elif [ "$1" = "-killall" ]
+then 
+echo 
+echo "Killing All Service"
+echo
+     service smbd stop
+     service apache2 stop
+     service vsftpd stop
+     service mysql stop
+     service vsftpd stop
+echo "All service are Stopped............"
+echo
+
+elif [ "$1" = "-vnc" ]
+ then
+   tightvncserver :1
+ echo 
+echo 
+echo "Vnc Service Enable...................."
+echo 
+echo
+
+elif [ "$1" = "-vncp" ]
+ then
+   tightvncserver -kill :1
+ echo
+echo
+echo "Vnc Service Stopped...................."
+echo
+echo
+
+
+elif [ "$1" = "-pf" ]
+ then
+echo 
+ echo "<------------Port forward service--------------->"
+ echo "             1 : for Web service "
+ echo "             2 : for ssh service "
+ echo "             3 : for vnc "
+ echo "             4 : for sftp service "
+ echo "             5 : custom port forward"
+ echo "             e : exit"
+echo  "------------------------------------------------>"
+read -p "Enter number for port foward : " service 
+
+ if [ "$service" = "1" ]
+  then
+   echo "Web Service port forwarding.........." 
+   read -p "alias : " h
+   read -p "localhost port (optional) : " lp
+   if [ -z "$lp" ]
+    then
+     echo "web server default port : 80"
+     lp="80"
+   fi
+   read -p "forward port (optional) : " fp  
+   if [ -z "$lp" -o "$lp"="80" -a  -z "$fp" ]
+    then
+     echo "ssh default port : 80"
+     echo "forward port : 80"
+     lp="80"
+     fp="80"
+    fi
+    ssh -R "$h":"$fp":localhost:"$lp" serveo.net
+   echo
+   echo 
+
+ elif [ "$service" = "2" -o "$service" = "4" ]
+  then
+   echo "ssh service port forwarding.........."
+   read -p "alias : " h
+   read -p "localhost port (optional) : " lp
+   if [ -z "$lp" ]
+    then
+     echo "ssh default port : 22"
+     lp="22"
+   fi
+   read -p "forward port (optional) : " fp  
+   if [ -z "$lp" -o "$lp"="22" -a  -z "$fp" ]
+    then
+     echo "ssh default port : 22"
+     echo "forward port : 22"
+     lp="22"
+     fp="22"
+    fi
+    ssh -R "$h":"$fp":localhost:"$lp" serveo.net
+   echo
+   echo 
+ elif [ "$service" = "3" ]
+  then
+   echo "vnc service port forwarding.........."
+   read -p "localhost port (optional) : " lp
+   if [ -z "$lp" ]
+    then
+     echo "vnc default port : 5901"
+     lp="5901"
+   fi
+   read -p "forward port (optional) : " fp  
+   if [ -z "$lp" -o "$lp"="5901" -a  -z "$fp" ]
+    then
+     echo "vnc default port : 5901"
+     echo "forward port : 5901"
+     lp="5901"
+     fp="5901"
+    fi
+    ssh -R "$fp":localhost:"$lp" serveo.net
+   echo
+   echo 
+ elif [ "$service" = "5" ]
+  then
+   echo "Custom port forwarding service.........."
+   read -p "localhost port (require) : " lp
+   read -p "forward port (require) : " fp  
+    ssh -R "$fp":localhost:"$lp" serveo.net
+   echo
+   echo 
+ elif [ "$service" = "e" ]
+  then
+   exit
+ fi
+echo
+
+ 
+elif [ "$1" = "-fix" ]
+ then
+  lsblk -l
+echo 
+echo
+ echo "Enter Your Device"
+    echo "1:/dev/sda1"
+    echo "2:/dev/sdb1"
+    echo "3:/dev/sdc1"
+    echo "4:/dev/sdd2"
+    echo "5:exit"
+echo 
+read device
+ if [ "$device" = "1" ]
+  then
+    umount /dev/sda1
+    mount -t ntfs-3g /dev/sda1 /home/
+    umount /dev/sda1
+echo 
+echo "fixed..."
+echo 
+fi
+if [ "$device" = "2" ]
+  then
+    umount /dev/sdb1
+    mount -t ntfs-3g /dev/sdb1 /home/
+    umount /dev/sdb1
+echo 
+echo "fixed..."
+echo 
+fi
+if [ "$device" = "3" ]
+  then
+    umount /dev/sdc1
+    mount -t ntfs-3g /dev/sdc1 /home/
+    umount /dev/sdc1
+echo 
+echo "fixed..."
+echo 
+fi
+if [ "$device" = "4" ]
+  then
+    umount /dev/sdd2
+    mount -t ntfs-3g /dev/sdd2 /home/
+    umount /dev/sdd2
+echo 
+echo "fixed..."
+echo 
+fi
+
+else 
+echo 
+ echo "        Usage : share <option>     "
+echo  
+echo "<<=======================Options==========================>>"
+echo 
+echo "         start : for data Sharing service start"
+echo "         stop  : for data Sharing service stop"
+echo "      -killall : for kill all service "
+echo "          -fix : If NTFS File is Write-protected"
+echo "          -vnc : For Vnc Server       "
+echo "         -vncp : For Vnc Server Stop  "
+echo "           -ns : for normal smbd service start"
+echo "           -np : for normal smbd service stop"
+echo "           -as : for web service start"
+echo "           -ap : for web service stop"
+echo "           -fs : for ftp service start"
+echo "           -fp : for ftp service stop"
+echo "         -dlna : for DLNA Service start"
+echo "        -dlnap : for DLNA Service stop"
+echo ""
+echo "           -pf : for portforwarding service start"
+echo "                 -pf <options> => Options:['-w','-ssh','-vnc','-sftp'] "
+echo ""
+echo "                 -pf -w <hostname> => hostname: eg.mktk => output will be 'mktk.serveo.net'"
+echo""
+echo "                 -pf -ssh <alias> <forward-port> <service-port> "
+echo "                           alias :  'servername'"
+echo "                 		 forward-port : 'the port you want to forward'  "
+echo "                           service-port : 'ssh service running port'"
+echo "                     'After forwarded port you can connect like this ----> ssh -J serveo.net:forward-port username@alias'"
+echo ""
+echo "                 -pf -vnc <forward-port> <service-port>"
+echo "                           forward-port : 'the port you want to forward'  "
+echo "                           service-port : 'vnc service running port'"
+echo "                     'After forwarded port you can connect any vnc viewer "
+echo ""
+echo "                 -pf -sftp <alias> <forward-port> <service-port> "
+echo "                           alias :  'servername'"
+echo "                           forward-port : 'the port you want to forward'  "
+echo "                           service-port : 'ssh service running port'"
+echo "                     'After forwarded port you can connect like this ----> sftp -J serveo.net:forward-port username@alias'"
+echo " "
+echo "       -pfkill : for portforwarding Service stop"
+echo 
+echo "<<========================================================>>"
+echo
+fi
+
