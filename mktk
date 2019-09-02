@@ -1,9 +1,4 @@
 #!/bin/bash
-  mkdir -p /home/share
-  mkdir -p /home/share/hdd1
-  mkdir -p /home/share/hdd2
-  mkdir -p /home/share/hdd3
-  mkdir -p /home/share/hdd4
  if [ "$1" = "start" ]
  then
   figlet SMB Service
@@ -128,6 +123,27 @@ echo
 echo "Ftp Service Stopped..................."
 echo 
 echo
+
+elif [ "$1" = "-setup" ]
+then
+figlet Lazy setup
+echo
+  mkdir -p /home/share
+  mkdir -p /home/share/hdd1
+  mkdir -p /home/share/hdd2
+  mkdir -p /home/share/hdd3
+  mkdir -p /home/share/hdd4
+
+  sudo apt update
+  sudo apt install samba
+  sudo apt install vsftpd
+  sudo apt install tightvncserver
+  sudo apt install minidlna
+  sudo apt install apache2
+  sudo apt install mariadb-server
+  
+echo
+ 
 
 elif [ "$1" = "-killall" ]
 then 
