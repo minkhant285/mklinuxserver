@@ -6,6 +6,7 @@
   mkdir -p /home/share/hdd4
  if [ "$1" = "start" ]
  then
+  figlet SMB Service
   lsblk -l
 echo 
 echo
@@ -16,7 +17,7 @@ echo
     echo "d:/dev/sdd1"
     echo "e:exit"
 echo 
- read -p "Enter Device" device
+ read -p "Enter Device -> " device
  if [ "$device" = "a" ]
   then
     umount /dev/sda1
@@ -163,6 +164,8 @@ echo
 elif [ "$1" = "-pf" ]
  then
 echo 
+figlet PF Service
+echo 
  echo "<------------Port forward service--------------->"
  echo "             1 : for Web service "
  echo "             2 : for ssh service "
@@ -303,7 +306,9 @@ fi
 
 else 
 echo 
- echo "        Usage : share <option>     "
+figlet MK Lazy Script
+echo 
+ echo "        Usage : mktk <option>     "
 echo  
 echo "<<=======================Options==========================>>"
 echo 
@@ -321,30 +326,7 @@ echo "           -fs : for ftp service start"
 echo "           -fp : for ftp service stop"
 echo "         -dlna : for DLNA Service start"
 echo "        -dlnap : for DLNA Service stop"
-echo ""
 echo "           -pf : for portforwarding service start"
-echo "                 -pf <options> => Options:['-w','-ssh','-vnc','-sftp'] "
-echo ""
-echo "                 -pf -w <hostname> => hostname: eg.mktk => output will be 'mktk.serveo.net'"
-echo""
-echo "                 -pf -ssh <alias> <forward-port> <service-port> "
-echo "                           alias :  'servername'"
-echo "                 		 forward-port : 'the port you want to forward'  "
-echo "                           service-port : 'ssh service running port'"
-echo "                     'After forwarded port you can connect like this ----> ssh -J serveo.net:forward-port username@alias'"
-echo ""
-echo "                 -pf -vnc <forward-port> <service-port>"
-echo "                           forward-port : 'the port you want to forward'  "
-echo "                           service-port : 'vnc service running port'"
-echo "                     'After forwarded port you can connect any vnc viewer "
-echo ""
-echo "                 -pf -sftp <alias> <forward-port> <service-port> "
-echo "                           alias :  'servername'"
-echo "                           forward-port : 'the port you want to forward'  "
-echo "                           service-port : 'ssh service running port'"
-echo "                     'After forwarded port you can connect like this ----> sftp -J serveo.net:forward-port username@alias'"
-echo " "
-echo "       -pfkill : for portforwarding Service stop"
 echo 
 echo "<<========================================================>>"
 echo
